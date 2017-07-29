@@ -8,7 +8,7 @@ import java.util.List;
  * Created by cleme on 29/04/2017.
  */
 
-public interface TaskListActivityI extends ConnectedActivityI {
+public interface TaskListFragmentI extends ConnectedActivityI {
     Object getSystemService(String layoutInflaterService);
 
     void askConfirmationBeforeRemoving(String id, String name);

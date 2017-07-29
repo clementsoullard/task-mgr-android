@@ -15,8 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.clement.tvscheduler.R;
-import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.ListeCourseActivity;
+import com.clement.tvscheduler.AppConstants;
+import com.clement.tvscheduler.activity.fragment.ListeCourseFragment;
 import com.clement.tvscheduler.object.Achat;
 import com.clement.tvscheduler.task.achat.EndAchatTask;
 import com.clement.tvscheduler.task.achat.UpdateAchatTask;
@@ -30,7 +30,7 @@ public class CoursesAdapter implements ListAdapter {
 
     private List<Achat> achats;
 
-    private ListeCourseActivity listeCourseActivity;
+    private ListeCourseFragment listeCourseActivity;
 
     private ListView listView;
 
@@ -39,7 +39,7 @@ public class CoursesAdapter implements ListAdapter {
     static float positionStartSwipingX = -1F;
 
 
-    public CoursesAdapter(List<Achat> achats, ListeCourseActivity listeCourseActivity, ListView parentView) {
+    public CoursesAdapter(List<Achat> achats, ListeCourseFragment listeCourseActivity, ListView parentView) {
         this.achats = achats;
         this.listeCourseActivity = listeCourseActivity;
         this.listView = parentView;
@@ -101,7 +101,7 @@ public class CoursesAdapter implements ListAdapter {
 
                         switch (action) {
                             case (MotionEvent.ACTION_DOWN):
-                                Log.d(TVSchedulerConstants.DEBUG_TAG, "Action was DOWN in " + position);
+                                Log.d(AppConstants.DEBUG_TAG, "Action was DOWN in " + position);
                                 positionStartSwiping = position;
                                 positionStartSwipingX = event.getX();
 
@@ -110,23 +110,23 @@ public class CoursesAdapter implements ListAdapter {
                                 //     Log.d(DEBUG_TAG, "Action was MOVE for  " + position + " at X=" + event.getX());
                                 return true;
                             case (MotionEvent.ACTION_UP):
-                                Log.d(TVSchedulerConstants.DEBUG_TAG, "Action was UP in " + position);
+                                Log.d(AppConstants.DEBUG_TAG, "Action was UP in " + position);
                                 if (position == positionStartSwiping) {
                                     if (event.getX() - positionStartSwipingX > 0) {
-                                        Log.d(TVSchedulerConstants.DEBUG_TAG, "The swipe was done left to right");
+                                        Log.d(AppConstants.DEBUG_TAG, "The swipe was done left to right");
                                         Achat achat = achats.get(position);
-                                        Log.d(TVSchedulerConstants.DEBUG_TAG, "Suppression de " + achat.getName());
+                                        Log.d(AppConstants.DEBUG_TAG, "Suppression de " + achat.getName());
                                         listeCourseActivity.askConfirmationBeforeRemoving(achat.getId(), achat.getName());
                                     }
                                 }
                                 return true;
                             case (MotionEvent.ACTION_CANCEL):
-                                Log.d(TVSchedulerConstants.DEBUG_TAG, "Action was CANCEL in " + position);
+                                Log.d(AppConstants.DEBUG_TAG, "Action was CANCEL in " + position);
                                 /** In case the swipe could not end, we reset the swipe*/
                                 positionStartSwiping = -1;
                                 return true;
                             case (MotionEvent.ACTION_OUTSIDE):
-                                Log.d(TVSchedulerConstants.DEBUG_TAG, "Movement occurred outside bounds " +
+                                Log.d(AppConstants.DEBUG_TAG, "Movement occurred outside bounds " +
                                         "of current screen element");
                                 /** In case the swipe could not end, we reset the swipe*/
                                 positionStartSwiping = -1;
@@ -157,7 +157,7 @@ public class CoursesAdapter implements ListAdapter {
                     achat.setDone(checkBox.isChecked());
                     UpdateAchatTask updateAchatTask = new UpdateAchatTask(listeCourseActivity, achat);
                     updateAchatTask.execute();
-                    Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + achat.getId());
+                    Log.i(AppConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + achat.getId());
                 }
             });
         }
@@ -171,7 +171,7 @@ public class CoursesAdapter implements ListAdapter {
                 public void onClick(View v) {
                     EndAchatTask endAchatTask = new EndAchatTask(listeCourseActivity);
                     endAchatTask.execute();
-                    Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Click sur la tâche end achat");
+                    Log.i(AppConstants.ACTIVITY_TAG__TAG, "Click sur la tâche end achat");
                 }
             });
         }

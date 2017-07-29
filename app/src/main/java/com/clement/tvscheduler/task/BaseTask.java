@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.clement.tvscheduler.TVSchedulerConstants;
+import com.clement.tvscheduler.AppConstants;
 import com.clement.tvscheduler.activity.ConnectedActivityI;
 
 import java.io.InputStream;
@@ -50,7 +50,7 @@ public abstract class BaseTask extends AsyncTask<Integer, Integer, Long> {
             Certificate ca;
             try {
                 ca = cf.generateCertificate(caInput);
-                Log.d(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Ouverture du certificat " + "ca=" + ((X509Certificate) ca).getSubjectDN());
+                Log.d(AppConstants.ACTIVITY_TAG__TAG, "Ouverture du certificat " + "ca=" + ((X509Certificate) ca).getSubjectDN());
             } finally {
 
                 caInput.close();
@@ -88,16 +88,16 @@ public abstract class BaseTask extends AsyncTask<Integer, Integer, Long> {
         ConnectivityManager cm = (ConnectivityManager) connectedActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
         int netType = info.getType();
-        Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "NET Type " + netType + "  " + ConnectivityManager.TYPE_MOBILE + "  " + ConnectivityManager.TYPE_MOBILE_DUN + "  " + ConnectivityManager.TYPE_WIFI + " " + info.getExtraInfo() + " " + info.getSubtypeName());
+        Log.i(AppConstants.ACTIVITY_TAG__TAG, "NET Type " + netType + "  " + ConnectivityManager.TYPE_MOBILE + "  " + ConnectivityManager.TYPE_MOBILE_DUN + "  " + ConnectivityManager.TYPE_WIFI + " " + info.getExtraInfo() + " " + info.getSubtypeName());
         if (netType == ConnectivityManager.TYPE_WIFI) {
-            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Network is ok");
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "Network is ok");
             String extraInfo = info.getExtraInfo();
             if (extraInfo.contains("B1B6")) {
-                return TVSchedulerConstants.HTTP_RESEAU_LOCAL;
+                return AppConstants.HTTP_RESEAU_LOCAL;
             }
         }
-        Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, " on WAN");
-        return TVSchedulerConstants.HTTP_RESEAU_INET;
+        Log.i(AppConstants.ACTIVITY_TAG__TAG, " on WAN");
+        return AppConstants.HTTP_RESEAU_INET;
 
 
     }

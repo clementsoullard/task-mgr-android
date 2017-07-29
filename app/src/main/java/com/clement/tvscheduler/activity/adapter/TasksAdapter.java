@@ -14,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.clement.tvscheduler.R;
-import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.TaskListActivityI;
+import com.clement.tvscheduler.AppConstants;
+import com.clement.tvscheduler.activity.TaskListFragmentI;
 import com.clement.tvscheduler.object.Task;
 import com.clement.tvscheduler.task.task.UpdateTodoTask;
 
@@ -28,11 +28,11 @@ public class TasksAdapter implements ListAdapter {
 
     private List<Task> tasks;
 
-    private TaskListActivityI mainActivity;
+    private TaskListFragmentI mainActivity;
 
     private ListView listViewTodos;
 
-    public TasksAdapter(List<Task> tasks, TaskListActivityI mainActivity, ListView parentView) {
+    public TasksAdapter(List<Task> tasks, TaskListFragmentI mainActivity, ListView parentView) {
         this.tasks = tasks;
         this.mainActivity = mainActivity;
         this.listViewTodos = parentView;
@@ -96,7 +96,7 @@ public class TasksAdapter implements ListAdapter {
 
                     switch (action) {
                         case (MotionEvent.ACTION_DOWN):
-                            Log.d(TVSchedulerConstants.DEBUG_TAG, "Action was DOWN in " + position);
+                            Log.d(AppConstants.DEBUG_TAG, "Action was DOWN in " + position);
                             positionStartSwiping = position;
                             positionStartSwipingX = event.getX();
 
@@ -105,23 +105,23 @@ public class TasksAdapter implements ListAdapter {
                             //     Log.d(DEBUG_TAG, "Action was MOVE for  " + position + " at X=" + event.getX());
                             return true;
                         case (MotionEvent.ACTION_UP):
-                            Log.d(TVSchedulerConstants.DEBUG_TAG, "Action was UP in " + position);
+                            Log.d(AppConstants.DEBUG_TAG, "Action was UP in " + position);
                             if (position == positionStartSwiping) {
                                 if (event.getX() - positionStartSwipingX > 0) {
-                                    Log.d(TVSchedulerConstants.DEBUG_TAG, "The swipe was done left to right");
+                                    Log.d(AppConstants.DEBUG_TAG, "The swipe was done left to right");
                                     Task task = tasks.get(position);
-                                    Log.d(TVSchedulerConstants.DEBUG_TAG, "Suppression de " + task.getName());
+                                    Log.d(AppConstants.DEBUG_TAG, "Suppression de " + task.getName());
                                     mainActivity.askConfirmationBeforeRemoving(task.getId(), task.getName());
                                 }
                             }
                             return true;
                         case (MotionEvent.ACTION_CANCEL):
-                            Log.d(TVSchedulerConstants.DEBUG_TAG, "Action was CANCEL in " + position);
+                            Log.d(AppConstants.DEBUG_TAG, "Action was CANCEL in " + position);
                             /** In case the swipe could not end, we reset the swipe*/
                             positionStartSwiping = -1;
                             return true;
                         case (MotionEvent.ACTION_OUTSIDE):
-                            Log.d(TVSchedulerConstants.DEBUG_TAG, "Movement occurred outside bounds " +
+                            Log.d(AppConstants.DEBUG_TAG, "Movement occurred outside bounds " +
                                     "of current screen element");
                             /** In case the swipe could not end, we reset the swipe*/
                             positionStartSwiping = -1;
@@ -148,7 +148,7 @@ public class TasksAdapter implements ListAdapter {
                 task.setDone(checkBox.isChecked());
                 UpdateTodoTask updateTodoTask = new UpdateTodoTask(mainActivity, task);
                 updateTodoTask.execute();
-                Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + task.getId());
+                Log.i(AppConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + task.getId());
             }
         });
 

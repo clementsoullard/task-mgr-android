@@ -2,8 +2,8 @@ package com.clement.tvscheduler.task.achat;
 
 import android.util.Log;
 
-import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.ListeCourseActivity;
+import com.clement.tvscheduler.AppConstants;
+import com.clement.tvscheduler.activity.fragment.ListeCourseFragment;
 import com.clement.tvscheduler.object.Achat;
 import com.clement.tvscheduler.task.BaseTask;
 
@@ -27,7 +27,7 @@ public class UpdateAchatTask extends BaseTask {
     private Achat achat;
 
 
-    public UpdateAchatTask(ListeCourseActivity listeCourseActivity, Achat achat) {
+    public UpdateAchatTask(ListeCourseFragment listeCourseActivity, Achat achat) {
         super(listeCourseActivity);
         this.achat = achat;
 
@@ -60,14 +60,14 @@ public class UpdateAchatTask extends BaseTask {
 
 
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
-                Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "14 - HTTP_OK pour id " + achat.getId());
+                Log.i(AppConstants.ACTIVITY_TAG__TAG, "14 - HTTP_OK pour id " + achat.getId());
             } else {
-                Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Retour " + responseCode);
+                Log.e(AppConstants.ACTIVITY_TAG__TAG, "Retour " + responseCode);
                 messageRetour = "Service non disponible";
             }
             return 0L;
         } catch (Exception e) {
-            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
         }
         messageRetour = "Service non disponible";
         return null;

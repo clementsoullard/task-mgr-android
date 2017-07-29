@@ -2,8 +2,8 @@ package com.clement.tvscheduler.task.task;
 
 import android.util.Log;
 
-import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.TaskListActivityI;
+import com.clement.tvscheduler.AppConstants;
+import com.clement.tvscheduler.activity.TaskListFragmentI;
 import com.clement.tvscheduler.object.Task;
 import com.clement.tvscheduler.task.BaseTask;
 
@@ -27,7 +27,7 @@ public class UpdateTodoTask extends BaseTask {
     private Task task;
 
 
-    public UpdateTodoTask(TaskListActivityI mainActivity, Task task) {
+    public UpdateTodoTask(TaskListFragmentI mainActivity, Task task) {
         super(mainActivity);
         this.task = task;
 
@@ -61,14 +61,14 @@ public class UpdateTodoTask extends BaseTask {
 
 
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
-                Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, "14 - HTTP_OK");
+                Log.e(AppConstants.ACTIVITY_TAG__TAG, "14 - HTTP_OK");
             } else {
-                Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, responseCode + "  - False - HTTP_OK");
+                Log.e(AppConstants.ACTIVITY_TAG__TAG, responseCode + "  - False - HTTP_OK");
                 messageRetour = "Service non disponible";
             }
             return 0L;
         } catch (Exception e) {
-            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
         }
         messageRetour = "Service non disponible";
         return null;

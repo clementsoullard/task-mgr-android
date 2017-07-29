@@ -2,8 +2,8 @@ package com.clement.tvscheduler.task.achat;
 
 import android.util.Log;
 
-import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.ListeCourseActivity;
+import com.clement.tvscheduler.AppConstants;
+import com.clement.tvscheduler.activity.fragment.ListeCourseFragment;
 import com.clement.tvscheduler.object.Achat;
 import com.clement.tvscheduler.task.BaseTask;
 
@@ -23,14 +23,14 @@ public class AddAchatTask extends BaseTask {
 
     private Achat achat;
 
-    private ListeCourseActivity listeCourseActivity;
+    private ListeCourseFragment listeCourseActivity;
 
     /**
      *
      *
      */
 
-    public AddAchatTask(ListeCourseActivity listCourseActivity, Achat achat) {
+    public AddAchatTask(ListeCourseFragment listCourseActivity, Achat achat) {
         super(listCourseActivity);
         this.listeCourseActivity = listCourseActivity;
         this.achat = achat;
@@ -67,7 +67,7 @@ public class AddAchatTask extends BaseTask {
             }
             return 0L;
         } catch (Exception e) {
-            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
         }
         messageRetour = "Service non disponible";
         return null;

@@ -4,7 +4,7 @@ package com.clement.tvscheduler;
  * Created by cleme on 17/04/2017.
  */
 
-public class TVSchedulerConstants {
+public class AppConstants {
     public final static String DEBUG_TAG = "Gesture";
     public final static String ACTIVITY_TAG__TAG = "com.clement.tvscheduler";
 

@@ -16,20 +16,28 @@
         <!-- A child of the main activity -->
         <activity
             android:name=".activity.TasksActivity"
-            android:label="@string/create_task_activity_child"
-            >
+            android:label="@string/create_task_activity_child">
+
+
+            <fragment
+                android:id="@+id/tasks_fragment"
+                android:name="com.clement.tvscheduler.activity.fragment.TaskFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <fragment
+                android:id="@+id/course_fragment"
+                android:name="com.clement.tvscheduler.activity.fragment.ListeCourseFragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity>
-        <activity
-            android:name=".activity.ListeCourseActivity"
-            android:label="@string/liste_courses_activity_child"
-            >
-
 
         </activity>
     </application>

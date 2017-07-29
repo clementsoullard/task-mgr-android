@@ -2,8 +2,8 @@ package com.clement.tvscheduler.task.task;
 
 import android.util.Log;
 
-import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.TasksActivity;
+import com.clement.tvscheduler.AppConstants;
+import com.clement.tvscheduler.activity.fragment.TaskFragment;
 import com.clement.tvscheduler.object.Task;
 import com.clement.tvscheduler.task.BaseTask;
 
@@ -23,14 +23,14 @@ public class AddTodoTask extends BaseTask {
 
     private Task task;
 
-    private TasksActivity createTaskActivity;
+    private TaskFragment createTaskActivity;
 
     /**
      *
      *
      */
 
-    public AddTodoTask(TasksActivity createTaskActivity, Task task) {
+    public AddTodoTask(TaskFragment createTaskActivity, Task task) {
         super(createTaskActivity);
         this.createTaskActivity = createTaskActivity;
         this.task = task;
@@ -62,7 +62,7 @@ public class AddTodoTask extends BaseTask {
             messageRetour = "Succès";
             return 0L;
         } catch (Exception e) {
-            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
         }
         messageRetour = "Service non disponible";
         return null;
