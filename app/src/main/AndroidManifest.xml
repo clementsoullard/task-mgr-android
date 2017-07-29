@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.clement.tvscheduler">
+    package="com.clement.task">
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,20 +15,20 @@
 
         <!-- A child of the main activity -->
         <activity
-            android:name=".activity.TasksActivity"
+            android:name="com.clement.task.activity.TasksActivity"
             android:label="@string/create_task_activity_child">
 
 
             <fragment
                 android:id="@+id/tasks_fragment"
-                android:name="com.clement.tvscheduler.activity.fragment.TaskFragment"
+                android:name="com.clement.task.activity.fragment.TaskFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
             <fragment
                 android:id="@+id/course_fragment"
-                android:name="com.clement.tvscheduler.activity.fragment.ListeCourseFragment"
+                android:name="com.clement.task.activity.fragment.ListeCourseFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
