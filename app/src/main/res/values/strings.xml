@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TV Scheduler</string>
+    <string name="app_name">A faire/A Acheter</string>
     <string name="action_settings">Settings</string>
     <string name="pin">PIN</string>
     <string name="cancel">Annuler</string>

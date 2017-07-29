@@ -4,7 +4,7 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 
-import com.clement.tvscheduler.activity.TvPcActivity;
+import com.clement.tvscheduler.TVSchedulerConstants;
 import com.clement.tvscheduler.activity.TaskListActivityI;
 import com.clement.tvscheduler.object.Task;
 import com.clement.tvscheduler.task.BaseTask;
@@ -36,7 +36,7 @@ public class ListTodoTask extends BaseTask {
     @Override
     protected Long doInBackground(Integer... params) {
         try {
-            Log.i(TvPcActivity.TAG, "Execution " + this.getClass());
+            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Execution " + this.getClass());
             String uri = "/tvscheduler/today-tasks";
 //            if (taskOwner.equals("home")) {
   //              uri += "-home";
@@ -46,7 +46,7 @@ public class ListTodoTask extends BaseTask {
             messageRetour = "Succès";
             return 0L;
         } catch (Exception e) {
-            Log.e(TvPcActivity.TAG, e.getMessage(), e);
+            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
         }
         messageRetour = "Service non disponible";
         return 0L;
@@ -55,13 +55,13 @@ public class ListTodoTask extends BaseTask {
 
     @Override
     protected void onPostExecute(Long aLong) {
-        Log.i(TvPcActivity.TAG, "Taches retournées avec succès");
+        Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Taches retournées avec succès");
         if (tasks == null) {
             taskListActivity.showMessage("Erreur de service");
             return;
         }
         for (Task task : tasks) {
-            Log.i(TvPcActivity.TAG, "Tache: " + task.getName());
+            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Tache: " + task.getName());
         }
         taskListActivity.setTodos(tasks);
 
@@ -90,7 +90,7 @@ public class ListTodoTask extends BaseTask {
      * @throws IOException
      */
     public List<Task> readTodos(JsonReader reader) throws IOException {
-        Log.d(TvPcActivity.TAG, "Decryptage des Task du jour");
+        Log.d(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Decryptage des Task du jour");
         tasks = new ArrayList<Task>();
 
         reader.beginArray();

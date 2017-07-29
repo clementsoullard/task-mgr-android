@@ -4,8 +4,8 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 
+import com.clement.tvscheduler.TVSchedulerConstants;
 import com.clement.tvscheduler.activity.ListeCourseActivity;
-import com.clement.tvscheduler.activity.TvPcActivity;
 import com.clement.tvscheduler.object.Achat;
 import com.clement.tvscheduler.task.BaseTask;
 
@@ -36,14 +36,14 @@ public class ListAchatTask extends BaseTask {
     @Override
     protected Long doInBackground(Integer... params) {
         try {
-            Log.i(TvPcActivity.TAG, "Execution " + this.getClass());
+            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Execution " + this.getClass());
             InputStream is = getHttpUrlConnection("/tvscheduler/ws-active-achat").getInputStream();
             readJsonStream(is);
             //     messageRetour = "Succès";
 
             return 0L;
         } catch (Exception e) {
-            Log.e(TvPcActivity.TAG, e.getMessage(), e);
+            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
         }
         //       messageRetour = "Service non disponible";
         return 0L;
@@ -56,9 +56,9 @@ public class ListAchatTask extends BaseTask {
             listeCourseActivity.showMessage("Erreur du service");
             return;
         }
-        Log.i(TvPcActivity.TAG, "Achat retournés avec succès");
+        Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Achat retournés avec succès");
         for (Achat achat : achats) {
-            Log.i(TvPcActivity.TAG, "Achat: " + achat.getName());
+            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Achat: " + achat.getName());
         }
         listeCourseActivity.setAchats(achats);
 
@@ -87,7 +87,7 @@ public class ListAchatTask extends BaseTask {
      * @throws IOException
      */
     public List<Achat> readAchats(JsonReader reader) throws IOException {
-        Log.d(TvPcActivity.TAG, "Decryptage des acahts en cours");
+        Log.d(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Decryptage des acahts en cours");
         achats = new ArrayList<Achat>();
 
         reader.beginArray();

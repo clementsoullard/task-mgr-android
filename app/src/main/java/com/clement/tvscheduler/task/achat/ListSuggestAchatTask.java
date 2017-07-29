@@ -4,8 +4,8 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 
+import com.clement.tvscheduler.TVSchedulerConstants;
 import com.clement.tvscheduler.activity.ListeCourseActivity;
-import com.clement.tvscheduler.activity.TvPcActivity;
 import com.clement.tvscheduler.task.BaseTask;
 
 import java.io.IOException;
@@ -34,12 +34,12 @@ public class ListSuggestAchatTask extends BaseTask {
     @Override
     protected Long doInBackground(Integer... params) {
         try {
-            Log.i(TvPcActivity.TAG, "Execution " + this.getClass());
+            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Execution " + this.getClass());
             InputStream is = getHttpUrlConnection("tvscheduler/ws-suggest-achat").getInputStream();
             readJsonStream(is);
             return 0L;
         } catch (Exception e) {
-            Log.e(TvPcActivity.TAG, e.getMessage(), e);
+            Log.e(TVSchedulerConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
         }
         //       messageRetour = "Service non disponible";
         return 0L;
@@ -52,9 +52,9 @@ public class ListSuggestAchatTask extends BaseTask {
             listeCourseActivity.showMessage("Erreur du service");
             return;
         }
-        Log.i(TvPcActivity.TAG, "Achat retournés avec succès");
+        Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Achat retournés avec succès");
         for (String suggestion : suggestions) {
-            Log.i(TvPcActivity.TAG, "Achat: " + suggestion);
+            Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Achat: " + suggestion);
         }
         listeCourseActivity.setSuggestAchats(suggestions);
 
@@ -83,7 +83,7 @@ public class ListSuggestAchatTask extends BaseTask {
      * @throws IOException
      */
     public List<String> readAchats(JsonReader reader) throws IOException {
-        Log.d(TvPcActivity.TAG, "Lecture des achats suggérés");
+        Log.d(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Lecture des achats suggérés");
         suggestions = new ArrayList<String>();
 
         reader.beginArray();
@@ -106,7 +106,7 @@ public class ListSuggestAchatTask extends BaseTask {
                 reader.skipValue();
             } else if (nameJson.equals("name")) {
                 name = reader.nextString();
-                Log.d(TvPcActivity.TAG, "Lecture de " + name);
+                Log.d(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Lecture de " + name);
 
             } else {
                 reader.skipValue();

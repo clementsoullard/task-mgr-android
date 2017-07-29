@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.clement.tvscheduler.R;
 import com.clement.tvscheduler.TVSchedulerConstants;
-import com.clement.tvscheduler.activity.TvPcActivity;
 import com.clement.tvscheduler.activity.TaskListActivityI;
 import com.clement.tvscheduler.object.Task;
 import com.clement.tvscheduler.task.task.UpdateTodoTask;
@@ -149,7 +148,7 @@ public class TasksAdapter implements ListAdapter {
                 task.setDone(checkBox.isChecked());
                 UpdateTodoTask updateTodoTask = new UpdateTodoTask(mainActivity, task);
                 updateTodoTask.execute();
-                Log.i(TvPcActivity.TAG, "Click sur la tâche " + task.getId());
+                Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + task.getId());
             }
         });
 

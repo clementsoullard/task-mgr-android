@@ -12,35 +12,25 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.TvPcActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <!-- A child of the main activity -->
         <activity
             android:name=".activity.TasksActivity"
             android:label="@string/create_task_activity_child"
-            android:parentActivityName=".activity.TvPcActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.TvPcActivity" />
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".activity.ListeCourseActivity"
             android:label="@string/liste_courses_activity_child"
-            android:parentActivityName=".activity.TvPcActivity">
+            >
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.TvPcActivity" />
+
         </activity>
     </application>
 

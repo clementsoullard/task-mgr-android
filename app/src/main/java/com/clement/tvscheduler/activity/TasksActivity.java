@@ -47,16 +47,6 @@ public class TasksActivity extends AppCompatActivity implements ConnectedActivit
         setContentView(R.layout.activity_tasks);
         init();
         Log.d(TAG, "Passage sur on create");
-        // my_child_toolbar is defined in the layout file
-        Toolbar myChildToolbar =
-                (Toolbar) findViewById(R.id.my_child_toolbar);
-        // setSupportActionBar(myChildToolbar);
-
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
 
     }
 

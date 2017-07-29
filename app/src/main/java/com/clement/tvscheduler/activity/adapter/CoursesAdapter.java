@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.clement.tvscheduler.R;
 import com.clement.tvscheduler.TVSchedulerConstants;
 import com.clement.tvscheduler.activity.ListeCourseActivity;
-import com.clement.tvscheduler.activity.TvPcActivity;
 import com.clement.tvscheduler.object.Achat;
 import com.clement.tvscheduler.task.achat.EndAchatTask;
 import com.clement.tvscheduler.task.achat.UpdateAchatTask;
@@ -158,7 +157,7 @@ public class CoursesAdapter implements ListAdapter {
                     achat.setDone(checkBox.isChecked());
                     UpdateAchatTask updateAchatTask = new UpdateAchatTask(listeCourseActivity, achat);
                     updateAchatTask.execute();
-                    Log.i(TvPcActivity.TAG, "Click sur la tâche " + achat.getId());
+                    Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + achat.getId());
                 }
             });
         }
@@ -172,7 +171,7 @@ public class CoursesAdapter implements ListAdapter {
                 public void onClick(View v) {
                     EndAchatTask endAchatTask = new EndAchatTask(listeCourseActivity);
                     endAchatTask.execute();
-                    Log.i(TvPcActivity.TAG, "Click sur la tâche end achat");
+                    Log.i(TVSchedulerConstants.ACTIVITY_TAG__TAG, "Click sur la tâche end achat");
                 }
             });
         }
