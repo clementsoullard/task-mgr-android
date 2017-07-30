@@ -1,5 +1,7 @@
 package com.clement.task.activity;
 
+import android.content.Context;
+
 import com.clement.task.object.Task;
 
 import java.util.List;
@@ -16,6 +18,8 @@ public interface TaskListFragmentI extends ConnectedActivityI {
     void refreshTaskList();
 
     void setTodos(List<Task> tasks);
+
+    Context getContext();
 
 }
 

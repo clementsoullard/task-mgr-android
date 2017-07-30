@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -94,48 +95,48 @@ public class CoursesAdapter implements ListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (position < achats.size()) {
                 rowView = inflater.inflate(R.layout.achat_item, null);
-                rowView.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        int action = MotionEventCompat.getActionMasked(event);
-
-                        switch (action) {
-                            case (MotionEvent.ACTION_DOWN):
-                                Log.d(AppConstants.DEBUG_TAG, "Action was DOWN in " + position);
-                                positionStartSwiping = position;
-                                positionStartSwipingX = event.getX();
-
-                                return true;
-                            case (MotionEvent.ACTION_MOVE):
-                                //     Log.d(DEBUG_TAG, "Action was MOVE for  " + position + " at X=" + event.getX());
-                                return true;
-                            case (MotionEvent.ACTION_UP):
-                                Log.d(AppConstants.DEBUG_TAG, "Action was UP in " + position);
-                                if (position == positionStartSwiping) {
-                                    if (event.getX() - positionStartSwipingX > 0) {
-                                        Log.d(AppConstants.DEBUG_TAG, "The swipe was done left to right");
-                                        Achat achat = achats.get(position);
-                                        Log.d(AppConstants.DEBUG_TAG, "Suppression de " + achat.getName());
-                                        listeCourseActivity.askConfirmationBeforeRemoving(achat.getId(), achat.getName());
-                                    }
-                                }
-                                return true;
-                            case (MotionEvent.ACTION_CANCEL):
-                                Log.d(AppConstants.DEBUG_TAG, "Action was CANCEL in " + position);
-                                /** In case the swipe could not end, we reset the swipe*/
-                                positionStartSwiping = -1;
-                                return true;
-                            case (MotionEvent.ACTION_OUTSIDE):
-                                Log.d(AppConstants.DEBUG_TAG, "Movement occurred outside bounds " +
-                                        "of current screen element");
-                                /** In case the swipe could not end, we reset the swipe*/
-                                positionStartSwiping = -1;
-                                return true;
-                            default:
-                                return rowView.onTouchEvent(event);
-                        }
-                    }
-                });
+//                rowView.setOnTouchListener(new View.OnTouchListener() {
+//                    @Override
+//                    public boolean onTouch(View v, MotionEvent event) {
+//                        int action = MotionEventCompat.getActionMasked(event);
+//
+//                        switch (action) {
+//                            case (MotionEvent.ACTION_DOWN):
+//                                Log.d(AppConstants.DEBUG_TAG, "Action was DOWN in " + position);
+//                                positionStartSwiping = position;
+//                                positionStartSwipingX = event.getX();
+//
+//                                return true;
+//                            case (MotionEvent.ACTION_MOVE):
+//                                //     Log.d(DEBUG_TAG, "Action was MOVE for  " + position + " at X=" + event.getX());
+//                                return true;
+//                            case (MotionEvent.ACTION_UP):
+//                                Log.d(AppConstants.DEBUG_TAG, "Action was UP in " + position);
+//                                if (position == positionStartSwiping) {
+//                                    if (event.getX() - positionStartSwipingX > 0) {
+//                                        Log.d(AppConstants.DEBUG_TAG, "The swipe was done left to right");
+//                                        Achat achat = achats.get(position);
+//                                        Log.d(AppConstants.DEBUG_TAG, "Suppression de " + achat.getName());
+//                                        listeCourseActivity.askConfirmationBeforeRemoving(achat.getId(), achat.getName());
+//                                    }
+//                                }
+//                                return true;
+//                            case (MotionEvent.ACTION_CANCEL):
+//                                Log.d(AppConstants.DEBUG_TAG, "Action was CANCEL in " + position);
+//                                /** In case the swipe could not end, we reset the swipe*/
+//                                positionStartSwiping = -1;
+//                                return true;
+//                            case (MotionEvent.ACTION_OUTSIDE):
+//                                Log.d(AppConstants.DEBUG_TAG, "Movement occurred outside bounds " +
+//                                        "of current screen element");
+//                                /** In case the swipe could not end, we reset the swipe*/
+//                                positionStartSwiping = -1;
+//                                return true;
+//                            default:
+//                                return rowView.onTouchEvent(event);
+//                        }
+//                    }
+//                });
             } else {
                 rowView = inflater.inflate(R.layout.end_achat_item, null);
             }
@@ -145,6 +146,8 @@ public class CoursesAdapter implements ListAdapter {
         /**
          * In case we want to tag a course as done.
          .*/
+
+        // This test determine is ze qre not on the finir ñes course button;
         if (position < achats.size()) {
             TextView textView = (TextView) rowView.findViewById(R.id.label);
             textView.setText(achats.get(position).getName());
@@ -157,9 +160,24 @@ public class CoursesAdapter implements ListAdapter {
                     achat.setDone(checkBox.isChecked());
                     UpdateAchatTask updateAchatTask = new UpdateAchatTask(listeCourseActivity, achat);
                     updateAchatTask.execute();
-                    Log.i(AppConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + achat.getId());
+                    Log.i(AppConstants.ACTIVITY_TAG__TAG, "Click sur la course " + achat.getId());
                 }
             });
+
+            /**
+             * Then a the actions associated with a task are managed.
+             */
+
+            final GestureDetector gdt = new GestureDetector(rowView.getContext(), new CourseGestureListener(listeCourseActivity, achat.getId(), achat.getName()));
+            gdt.setIsLongpressEnabled(false);
+
+            rowView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return gdt.onTouchEvent(event);
+                }
+            });
+
         }
         /**
          * In case we are on the end course bouton.

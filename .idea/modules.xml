@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/TVScheduler.iml" filepath="$PROJECT_DIR$/TVScheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/TaskMgr.iml" filepath="$PROJECT_DIR$/TaskMgr.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/tvscheduler-android.iml" filepath="$PROJECT_DIR$/tvscheduler-android.iml" />
     </modules>
   </component>

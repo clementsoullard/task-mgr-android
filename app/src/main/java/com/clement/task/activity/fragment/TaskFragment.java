@@ -1,5 +1,6 @@
 package com.clement.task.activity.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -124,6 +125,7 @@ public class TaskFragment extends BaseFragment implements TaskListFragmentI {
         listViewTasks.setAdapter(listAdapter);
         listViewTasks.setEmptyView(fragmentView.findViewById(R.id.empty_tasks_view));
     }
+
 
     @Override
     public void askConfirmationBeforeRemoving(final String id, String name) {

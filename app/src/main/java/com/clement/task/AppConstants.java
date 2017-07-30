@@ -5,7 +5,7 @@ package com.clement.task;
  */
 
 public class AppConstants {
-    public final static String DEBUG_TAG = "Gesture";
+    public final static String DEBUG_TAG = "com.clement.task";
 
     public final static String ACTIVITY_TAG__TAG = "com.clement.task";
 
