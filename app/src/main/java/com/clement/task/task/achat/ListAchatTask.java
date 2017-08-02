@@ -5,7 +5,7 @@ import android.util.JsonToken;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.fragment.ListeCourseFragment;
+import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.object.Achat;
 import com.clement.task.task.BaseTask;
 
@@ -24,12 +24,12 @@ public class ListAchatTask extends BaseTask {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     List<Achat> achats;
 
-    ListeCourseFragment listeCourseActivity;
+    CourseFragment listeCourseActivity;
 
     //  private String messageRetour;
 
-    public ListAchatTask(ListeCourseFragment listeCourseActivity) {
-        super(listeCourseActivity);
+    public ListAchatTask(CourseFragment listeCourseActivity) {
+        super(listeCourseActivity, listeCourseActivity.getTaskSQLiteHelper());
         this.listeCourseActivity = listeCourseActivity;
     }
 
@@ -39,13 +39,12 @@ public class ListAchatTask extends BaseTask {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "Execution " + this.getClass());
             InputStream is = getHttpUrlConnection("/tvscheduler/ws-active-achat").getInputStream();
             readJsonStream(is);
-            //     messageRetour = "Succès";
-
             return 0L;
         } catch (Exception e) {
-            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage() + " reading the achat from the database");
+            achats = dbHelper.listAchats(false);
+
         }
-        //       messageRetour = "Service non disponible";
         return 0L;
     }
 
@@ -91,9 +90,12 @@ public class ListAchatTask extends BaseTask {
         achats = new ArrayList<Achat>();
 
         reader.beginArray();
+        dbHelper.clearAchat();
         while (reader.hasNext()) {
             Achat achat = readAchat(reader);
             achats.add(achat);
+            dbHelper.insertAchat(achat, true);
+
         }
         return achats;
     }

@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.clement.task.AppConstants;
 import com.clement.task.activity.TaskListFragmentI;
+import com.clement.task.activity.contract.TaskContract;
+import com.clement.task.activity.contract.DbHelper;
 import com.clement.task.object.Task;
 import com.clement.task.task.BaseTask;
 
@@ -27,8 +29,8 @@ public class UpdateTodoTask extends BaseTask {
     private Task task;
 
 
-    public UpdateTodoTask(TaskListFragmentI mainActivity, Task task) {
-        super(mainActivity);
+    public UpdateTodoTask(TaskListFragmentI mainActivity, Task task, DbHelper taskSQLiteHelper) {
+        super(mainActivity, taskSQLiteHelper);
         this.task = task;
 
     }
@@ -44,7 +46,7 @@ public class UpdateTodoTask extends BaseTask {
             urlConnection.setRequestProperty("Content-Type", "application/json");
 
             /*
-             * JSON
+             * <preparing the JSON
              */
 
             JSONObject root = new JSONObject();
@@ -63,7 +65,8 @@ public class UpdateTodoTask extends BaseTask {
             if (responseCode == HttpsURLConnection.HTTP_NO_CONTENT) {
                 Log.e(AppConstants.ACTIVITY_TAG__TAG, "14 - HTTP_OK");
             } else {
-                Log.e(AppConstants.ACTIVITY_TAG__TAG, responseCode + "  - False - HTTP_OK");
+                Log.e(AppConstants.ACTIVITY_TAG__TAG, responseCode + "  - False - HTTP_OK updating db marking to sync");
+                dbHelper.setModified(task.getId(), task.getDone(), TaskContract.TO_UPDATE);
                 messageRetour = "Service non disponible";
             }
             return 0L;

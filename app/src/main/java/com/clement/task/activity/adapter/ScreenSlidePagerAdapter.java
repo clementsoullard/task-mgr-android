@@ -3,7 +3,7 @@ package com.clement.task.activity.adapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.clement.task.activity.fragment.ListeCourseFragment;
+import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.activity.fragment.TaskFragment;
 
 /**
@@ -21,7 +21,7 @@ public class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         if (position == 0) {
             return new TaskFragment();
         } else {
-            return new ListeCourseFragment();
+            return new CourseFragment();
         }
 
     }

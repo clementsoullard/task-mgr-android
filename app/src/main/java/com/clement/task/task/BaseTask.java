@@ -8,7 +8,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.ConnectedActivityI;
+import com.clement.task.activity.ConnectedContextI;
+import com.clement.task.activity.contract.DbHelper;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -28,12 +29,15 @@ import javax.net.ssl.TrustManagerFactory;
 public abstract class BaseTask extends AsyncTask<Integer, Integer, Long> {
 
 
-    static SSLContext context;
+    private static SSLContext context;
 
-    protected ConnectedActivityI connectedActivity;
+    protected ConnectedContextI connectedActivity;
 
-    public BaseTask(ConnectedActivityI connectedActivity) {
+    protected DbHelper dbHelper;
+
+    public BaseTask(ConnectedContextI connectedActivity, DbHelper taskSQLiteHelper) {
         this.connectedActivity = connectedActivity;
+        this.dbHelper = taskSQLiteHelper;
     }
 
     /**
@@ -82,6 +86,7 @@ public abstract class BaseTask extends AsyncTask<Integer, Integer, Long> {
 
     /**
      * Return the url depending on the location (internet or LAN)
+     *
      * @return
      */
     protected String getBaseURL() {

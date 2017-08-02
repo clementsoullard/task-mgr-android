@@ -59,8 +59,6 @@ public class TaskFragment extends BaseFragment implements TaskListFragmentI {
     }
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -150,8 +148,24 @@ public class TaskFragment extends BaseFragment implements TaskListFragmentI {
 
     @Override
     public void refreshTaskList() {
+        checkSync();
+
+
         ListTodoTask listTodoTask = new ListTodoTask(this);
         listTodoTask.execute();
+    }
+
+    /**
+     * Check if some elements require a synchronization
+     */
+    private void checkSync() {
+
+        List<Task> tasks = getTaskSQLiteHelper().listTasks(true);
+        if (tasks.size() > 0) {
+            Log.d(AppConstants.ACTIVITY_TAG__TAG, "There are some task remainin to sync");
+        }else {
+            Log.d(AppConstants.ACTIVITY_TAG__TAG, "No tasks to sync");
+        }
     }
 
     @Override

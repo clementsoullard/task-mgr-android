@@ -5,7 +5,7 @@ import android.util.JsonToken;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.fragment.ListeCourseFragment;
+import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.task.BaseTask;
 
 import java.io.IOException;
@@ -22,12 +22,12 @@ public class ListSuggestAchatTask extends BaseTask {
 
     List<String> suggestions;
 
-    ListeCourseFragment listeCourseActivity;
+    CourseFragment listeCourseActivity;
 
     //  private String messageRetour;
 
-    public ListSuggestAchatTask(ListeCourseFragment listeCourseActivity) {
-        super(listeCourseActivity);
+    public ListSuggestAchatTask(CourseFragment listeCourseActivity) {
+        super(listeCourseActivity,listeCourseActivity.getTaskSQLiteHelper());
         this.listeCourseActivity = listeCourseActivity;
     }
 
@@ -39,10 +39,9 @@ public class ListSuggestAchatTask extends BaseTask {
             readJsonStream(is);
             return 0L;
         } catch (Exception e) {
-            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage()+ "Unable to get suggestion list ignoring");
         }
-        //       messageRetour = "Service non disponible";
-        return 0L;
+          return 0L;
     }
 
 

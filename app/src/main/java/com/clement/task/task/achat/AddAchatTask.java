@@ -3,7 +3,7 @@ package com.clement.task.task.achat;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.fragment.ListeCourseFragment;
+import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.object.Achat;
 import com.clement.task.task.BaseTask;
 
@@ -23,15 +23,15 @@ public class AddAchatTask extends BaseTask {
 
     private Achat achat;
 
-    private ListeCourseFragment listeCourseActivity;
+    private CourseFragment listeCourseActivity;
 
     /**
      *
      *
      */
 
-    public AddAchatTask(ListeCourseFragment listCourseActivity, Achat achat) {
-        super(listCourseActivity);
+    public AddAchatTask(CourseFragment listCourseActivity, Achat achat) {
+        super(listCourseActivity,listCourseActivity.getTaskSQLiteHelper());
         this.listeCourseActivity = listCourseActivity;
         this.achat = achat;
     }

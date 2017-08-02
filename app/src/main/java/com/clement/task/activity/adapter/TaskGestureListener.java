@@ -32,7 +32,7 @@ public class TaskGestureListener extends GestureDetector.SimpleOnGestureListener
     @Override
     public void onLongPress(MotionEvent e) {
         Log.d(AppConstants.DEBUG_TAG, "long Press "+(System.currentTimeMillis()- e.getDownTime()));
-        tasksActivity.askConfirmationBeforeRemoving(taskId, taskName);
+            tasksActivity.askConfirmationBeforeRemoving(taskId, taskName);
         super.onLongPress(e);
     }
 

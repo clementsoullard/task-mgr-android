@@ -9,8 +9,9 @@ import android.widget.Toast;
 
 import com.clement.task.R;
 import com.clement.task.activity.adapter.ScreenSlidePagerAdapter;
+import com.clement.task.activity.contract.DbHelper;
 
-public class TasksActivity extends FragmentActivity implements ConnectedActivityI {
+public class TasksActivity extends FragmentActivity implements ConnectedContextI {
 
     /**
      * The number of pages (wizard steps) to show in this demo.
@@ -28,6 +29,7 @@ public class TasksActivity extends FragmentActivity implements ConnectedActivity
      */
     private PagerAdapter mPagerAdapter;
 
+    private DbHelper taskSQLiteHelper;
 
     @Override
     public void onBackPressed() {
@@ -42,7 +44,13 @@ public class TasksActivity extends FragmentActivity implements ConnectedActivity
     }
 
 
-
+    @Override
+    public DbHelper getTaskSQLiteHelper() {
+        if (taskSQLiteHelper == null) {
+            taskSQLiteHelper = new DbHelper(this);
+        }
+        return taskSQLiteHelper;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

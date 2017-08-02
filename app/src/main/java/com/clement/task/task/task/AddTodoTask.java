@@ -31,7 +31,7 @@ public class AddTodoTask extends BaseTask {
      */
 
     public AddTodoTask(TaskFragment createTaskActivity, Task task) {
-        super(createTaskActivity);
+        super(createTaskActivity,createTaskActivity.getTaskSQLiteHelper());
         this.createTaskActivity = createTaskActivity;
         this.task = task;
     }
@@ -60,9 +60,11 @@ public class AddTodoTask extends BaseTask {
             os.write(outputBytes);
             int responseCode = urlConnection.getResponseCode();
             messageRetour = "Succès";
+            dbHelper.insertTask(task,true);
             return 0L;
         } catch (Exception e) {
-            Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
+            dbHelper.insertTask(task,false);
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage() + " ajout manuel a la db.");
         }
         messageRetour = "Service non disponible";
         return null;

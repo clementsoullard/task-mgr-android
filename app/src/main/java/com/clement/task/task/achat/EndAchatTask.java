@@ -3,7 +3,7 @@ package com.clement.task.task.achat;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.fragment.ListeCourseFragment;
+import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.task.BaseTask;
 
 import java.net.HttpURLConnection;
@@ -16,15 +16,15 @@ public class EndAchatTask extends BaseTask {
 
     private String messageRetour;
 
-    private ListeCourseFragment listeCourseActivity;
+    private CourseFragment listeCourseActivity;
 
     /**
      *
      *
      */
 
-    public EndAchatTask(ListeCourseFragment listCourseActivity) {
-        super(listCourseActivity);
+    public EndAchatTask(CourseFragment listCourseActivity) {
+        super(listCourseActivity, listCourseActivity.getTaskSQLiteHelper());
         this.listeCourseActivity = listCourseActivity;
     }
 

@@ -3,24 +3,23 @@ package com.clement.task.activity.adapter;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.fragment.ListeCourseFragment;
+import com.clement.task.activity.fragment.CourseFragment;
 
 /**
  * Created by cleme on 30/07/2017.
  */
 
 public class CourseGestureListener extends GestureDetector.SimpleOnGestureListener {
-    private ListeCourseFragment listeCourseFragment;
+    private CourseFragment listeCourseFragment;
 
     private String courseId;
 
     private String courseName;
 
 
-    public CourseGestureListener(ListeCourseFragment tasksActivity, String courseId, String courseName) {
+    public CourseGestureListener(CourseFragment tasksActivity, String courseId, String courseName) {
         super();
         this.listeCourseFragment = tasksActivity;
         this.courseId = courseId;
@@ -32,8 +31,7 @@ public class CourseGestureListener extends GestureDetector.SimpleOnGestureListen
     public void onLongPress(MotionEvent e) {
         Log.d(AppConstants.DEBUG_TAG, "long Press " + e.getDownTime());
         listeCourseFragment.askConfirmationBeforeRemoving(courseId, courseName);
-
-        super.onLongPress(e);
+       super.onLongPress(e);
     }
 
     @Override

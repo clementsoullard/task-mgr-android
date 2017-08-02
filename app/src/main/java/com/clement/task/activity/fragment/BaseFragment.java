@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.widget.Toast;
 
-import com.clement.task.activity.ConnectedActivityI;
+import com.clement.task.activity.ConnectedContextI;
+import com.clement.task.activity.TasksActivity;
+import com.clement.task.activity.contract.DbHelper;
 
 /**
  * Created by cleme on 29/07/2017.
  */
 
-public class BaseFragment  extends android.support.v4.app.Fragment implements ConnectedActivityI {
+public class BaseFragment  extends android.support.v4.app.Fragment implements ConnectedContextI {
 
     @Override
     public Object getSystemService(String layoutInflaterService) {
@@ -19,6 +21,12 @@ public class BaseFragment  extends android.support.v4.app.Fragment implements Co
     public AssetManager getAssets() {
         return getActivity().getAssets();
     }
+
+    @Override
+    public DbHelper getTaskSQLiteHelper() {
+        return ((TasksActivity)getActivity()).getTaskSQLiteHelper();
+    }
+
     /**
      * @param message
      */
@@ -29,8 +37,5 @@ public class BaseFragment  extends android.support.v4.app.Fragment implements Co
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
-
-
-
 
 }

@@ -27,7 +27,7 @@ public class RemoveTodoTask extends BaseTask {
      */
 
     public RemoveTodoTask(TaskListFragmentI mainActivity, String id) {
-        super(mainActivity);
+        super(mainActivity,mainActivity.getTaskSQLiteHelper());
         this.mainActivity = mainActivity;
         this.taskId = id;
     }

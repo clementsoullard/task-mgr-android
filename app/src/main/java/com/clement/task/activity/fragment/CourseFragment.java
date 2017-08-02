@@ -25,7 +25,7 @@ import com.clement.task.task.achat.RemoveAchatTask;
 
 import java.util.List;
 
-public class ListeCourseFragment extends BaseFragment{
+public class CourseFragment extends BaseFragment{
 
 
     private ListView listViewAchats;
@@ -105,7 +105,7 @@ public class ListeCourseFragment extends BaseFragment{
                 Log.d(AppConstants.ACTIVITY_TAG__TAG, "Click sur le bouton ajout");
                 Achat achat = new Achat();
                 achat.setName(achatAjoutEdt.getText().toString());
-                AddAchatTask addAchatTask = new AddAchatTask(ListeCourseFragment.this, achat);
+                AddAchatTask addAchatTask = new AddAchatTask(CourseFragment.this, achat);
                 addAchatTask.execute();
             }
         });
@@ -136,7 +136,7 @@ public class ListeCourseFragment extends BaseFragment{
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        RemoveAchatTask removeAchatTask = new RemoveAchatTask(ListeCourseFragment.this, achatId);
+                        RemoveAchatTask removeAchatTask = new RemoveAchatTask(CourseFragment.this, achatId);
                         removeAchatTask.execute();
                     }
                 })

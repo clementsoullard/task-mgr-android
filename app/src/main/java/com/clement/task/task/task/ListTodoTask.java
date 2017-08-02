@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.clement.task.AppConstants;
 import com.clement.task.activity.TaskListFragmentI;
+import com.clement.task.activity.contract.DbHelper;
 import com.clement.task.object.Task;
 import com.clement.task.task.BaseTask;
 
@@ -28,7 +29,7 @@ public class ListTodoTask extends BaseTask {
     // private String taskOwner;
 
     public ListTodoTask(TaskListFragmentI mainActivity) {
-        super(mainActivity);
+        super(mainActivity, mainActivity.getTaskSQLiteHelper());
         this.taskListActivity = mainActivity;
         //   this.taskOwner = taskOwner;
     }
@@ -43,7 +44,8 @@ public class ListTodoTask extends BaseTask {
             messageRetour = "Succès";
             return 0L;
         } catch (Exception e) {
-            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);
+            tasks = dbHelper.listTasks(false);
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage()+ " récuppération des tache par la base de données");
         }
         messageRetour = "Service non disponible";
         return 0L;
@@ -73,7 +75,7 @@ public class ListTodoTask extends BaseTask {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
 
-            return readTodos(reader);
+            return readTasks(reader);
         } finally {
             reader.close();
         }
@@ -86,19 +88,33 @@ public class ListTodoTask extends BaseTask {
      * @return
      * @throws IOException
      */
-    public List<Task> readTodos(JsonReader reader) throws IOException {
+    public List<Task> readTasks(JsonReader reader) throws IOException {
         Log.d(AppConstants.ACTIVITY_TAG__TAG, "Decryptage des Task du jour");
         tasks = new ArrayList<Task>();
+        /**
+         * Saving into the database.
+         */
 
         reader.beginArray();
+        dbHelper.clearTask();
+
         while (reader.hasNext()) {
-            Task task = readTodo(reader);
+            Task task = readTask(reader);
             tasks.add(task);
+            dbHelper.insertTask(task,true);
         }
         return tasks;
     }
 
-    private Task readTodo(JsonReader reader) throws IOException {
+    /**
+     * Read a task from the XML flow.
+     *
+     * @param reader
+     * @return
+     * @throws IOException
+     */
+    private Task readTask(JsonReader reader) throws IOException {
+
         Task task = new Task();
         reader.beginObject();
         String name = null;
@@ -111,7 +127,6 @@ public class ListTodoTask extends BaseTask {
         while (reader.hasNext()) {
             String nameJson = reader.nextName();
             JsonToken look = reader.peek();
-
             if (look == JsonToken.NULL) {
                 reader.skipValue();
             } else if (nameJson.equals("taskName")) {
