@@ -113,8 +113,6 @@ public class TaskFragment extends BaseFragment implements TaskListFragmentI {
         radioGrouOwner.check(R.id.idHomeRadio);
         checkBoxTemporary.setChecked(false);
         refreshTaskList();
-        //  Intent upIntent = NavUtils.getParentActivityIntent(this);
-        //  NavUtils.navigateUpTo(this, upIntent);
 
     }
 

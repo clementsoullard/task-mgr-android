@@ -8,7 +8,6 @@ import com.clement.task.AppConstants;
 import com.clement.task.activity.TaskListFragmentI;
 import com.clement.task.activity.contract.DbHelper;
 import com.clement.task.object.Task;
-import com.clement.task.task.BaseTask;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,24 +19,30 @@ import java.util.List;
 /**
  * Created by Clément on 09/07/2016.
  */
-public class ListTodoTask extends BaseTask {
+public class ListTodoTask extends CrudTodoTask {
 
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
     private List<Task> tasks;
-    private String messageRetour;
-    private TaskListFragmentI taskListActivity;
-    // private String taskOwner;
+
 
     public ListTodoTask(TaskListFragmentI mainActivity) {
-        super(mainActivity, mainActivity.getTaskSQLiteHelper());
-        this.taskListActivity = mainActivity;
-        //   this.taskOwner = taskOwner;
+        super(mainActivity);
     }
 
     @Override
     protected Long doInBackground(Integer... params) {
         try {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "Execution " + this.getClass());
+            List<Task> tasksToSync = dbHelper.listTasks(true);
+            if (tasksToSync.size() > 0) {
+                Log.d(AppConstants.ACTIVITY_TAG__TAG, "There are some task to Sync before calling the server.");
+                for (Task taskToSync : tasksToSync
+                        ) {
+                    syncTask(taskToSync);
+                    Log.d(AppConstants.ACTIVITY_TAG__TAG, "Need to sync " + taskToSync.getName());
+                }
+            }
             String uri = "/tvscheduler/today-tasks";
             InputStream is = getHttpUrlConnection(uri).getInputStream();
             readJsonStream(is);
@@ -45,10 +50,26 @@ public class ListTodoTask extends BaseTask {
             return 0L;
         } catch (Exception e) {
             tasks = dbHelper.listTasks(false);
-            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage()+ " récuppération des tache par la base de données");
+            Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage() + " récupération des tache par la base de données");
         }
         messageRetour = "Service non disponible";
         return 0L;
+    }
+
+    /**
+     * Synchronize a task with server side.
+     *
+     * @param taskToSync
+     */
+    private void syncTask(Task taskToSync) throws Exception {
+        if (taskToSync.getToCreateToDelete() == DbHelper.TO_CREATE) {
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "A task " + taskToSync.getName() + " must be created on server side");
+            callCreateWebService(taskToSync);
+        } else if (taskToSync.getToCreateToDelete() == DbHelper.TO_DELETE) {
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "A task " + taskToSync.getName() + " must be deleted on server side");
+        } else if (taskToSync.getToCreateToDelete() == DbHelper.TO_UPDATE) {
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "A task " + taskToSync.getName() + " must be updated on server side");
+        }
     }
 
 
@@ -56,13 +77,13 @@ public class ListTodoTask extends BaseTask {
     protected void onPostExecute(Long aLong) {
         Log.i(AppConstants.ACTIVITY_TAG__TAG, "Taches retournées avec succès");
         if (tasks == null) {
-            taskListActivity.showMessage("Erreur de service");
+            taskFragmentI.showMessage("Erreur de service");
             return;
         }
         for (Task task : tasks) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "Tache: " + task.getName());
         }
-        taskListActivity.setTodos(tasks);
+        taskFragmentI.setTodos(tasks);
 
     }
 
@@ -101,7 +122,7 @@ public class ListTodoTask extends BaseTask {
         while (reader.hasNext()) {
             Task task = readTask(reader);
             tasks.add(task);
-            dbHelper.insertTask(task,true);
+            dbHelper.insertTask(task, true, DbHelper.IN_SYNC);
         }
         return tasks;
     }

@@ -50,6 +50,7 @@ public class RemoveTodoTask extends BaseTask {
             }
             return 0L;
         } catch (Exception e) {
+            dbHelper.markTaskForDeletion(taskId);
             Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
         }
         messageRetour = "Service non disponible";

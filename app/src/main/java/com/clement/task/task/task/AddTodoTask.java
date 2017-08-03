@@ -3,27 +3,18 @@ package com.clement.task.task.task;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
+import com.clement.task.activity.contract.DbHelper;
 import com.clement.task.activity.fragment.TaskFragment;
 import com.clement.task.object.Task;
-import com.clement.task.task.BaseTask;
-
-import org.json.JSONObject;
-
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 
 /**
  * This task is to add an task to the liste de courses
  * Created by Clément on 09/07/2016.
  */
-public class AddTodoTask extends BaseTask {
+public class AddTodoTask extends CrudTodoTask {
 
-
-    private String messageRetour;
 
     private Task task;
-
-    private TaskFragment createTaskActivity;
 
     /**
      *
@@ -31,39 +22,18 @@ public class AddTodoTask extends BaseTask {
      */
 
     public AddTodoTask(TaskFragment createTaskActivity, Task task) {
-        super(createTaskActivity,createTaskActivity.getTaskSQLiteHelper());
-        this.createTaskActivity = createTaskActivity;
+        super(createTaskActivity);
         this.task = task;
     }
 
     @Override
     protected Long doInBackground(Integer... params) {
         try {
-            HttpURLConnection urlConnection = getHttpUrlConnection("tvscheduler/ws-create-todo");
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-          /*
-             * JSON
-             */
-
-            JSONObject root = new JSONObject();
-            root.put("taskName", task.getName());
-            root.put("owner", task.getOwner());
-            root.put("expireAtTheEndOfTheDay", task.getTemporary());
-
-            String str = root.toString();
-            byte[] outputBytes = str.getBytes("UTF-8");
-            OutputStream os = urlConnection.getOutputStream();
-            os.write(outputBytes);
-            int responseCode = urlConnection.getResponseCode();
-            messageRetour = "Succès";
-            dbHelper.insertTask(task,true);
+            callCreateWebService(task);
+            dbHelper.insertTask(task, true, DbHelper.IN_SYNC);
             return 0L;
         } catch (Exception e) {
-            dbHelper.insertTask(task,false);
+            dbHelper.insertTask(task, false, DbHelper.TO_CREATE);
             Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage() + " ajout manuel a la db.");
         }
         messageRetour = "Service non disponible";
@@ -74,7 +44,7 @@ public class AddTodoTask extends BaseTask {
     @Override
     protected void onPostExecute(Long aLong) {
         connectedActivity.showMessage(messageRetour);
-        createTaskActivity.taskEnregistre();
+        taskFragmentI.taskEnregistre();
     }
 
 

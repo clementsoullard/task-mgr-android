@@ -27,8 +27,21 @@ public class DbHelper extends SQLiteOpenHelper {
      * This are the value to store the status of the entry in the column to create to delete.
      * TO_UPDATE means it is nothing
      */
+    /**
+     * Feed the column ToCreate_ToDeelete with this value, if the entry is in sync
+     */
+    public static Integer IN_SYNC = -1;
+    /**
+     * Feed the column ToCreate_ToDeelete with this value, if the entry is to update
+     */
     public static Integer TO_UPDATE = 0;
+    /**
+     * Feed the column ToCreate_ToDeelete with this value, if the entry is to create
+     */
     public static Integer TO_CREATE = 1;
+    /**
+     * Feed the column ToCreate_ToDeelete with this value, if the entry is to delete
+     */
     public static Integer TO_DELETE = 2;
 
     /* Date format to convert to stonrg*/
@@ -96,6 +109,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TaskContract.TaskEntry.TABLE_NAME, null, null);
     }
+
     /**
      * Clear all the entries in the database.
      */
@@ -160,21 +174,23 @@ public class DbHelper extends SQLiteOpenHelper {
                 TaskContract.TaskEntry.COLUMN_NAME_DONE,
                 TaskContract.TaskEntry.COLUMN_NAME_OWNER,
                 TaskContract.TaskEntry.COLUMN_NAME_MONGO_ID,
-
+                TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE
         };
-
-
-// How you want the results sorted in the resulting Cursor
         String sortOrder = null;
 
         String selection = null;
-
-        // Filter results WHERE "title" = 'My Title'
         String[] selectionArgs = {};
+        /**
+         * Only the tasks to sync
+         */
         if (onlyTaskToSync) {
             selection = TaskContract.TaskEntry.COLUMN_NAME_INSYNC + " LIKE ?";
-            selectionArgs =new String[] {"false" };
+            selectionArgs = new String[]{"0"};
+        } else {
+            selection = TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE + " != 2  or "+TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE +" is null";
+       //     selectionArgs = new String[]{TO_DELETE.toString()};
         }
+
         Cursor cursor = db.query(
                 TaskContract.TaskEntry.TABLE_NAME,                     // The table to query
                 projection,                               // The columns to return
@@ -197,12 +213,15 @@ public class DbHelper extends SQLiteOpenHelper {
                     cursor.getColumnIndexOrThrow(TaskContract.TaskEntry.COLUMN_NAME_OWNER));
             String mongoId = cursor.getString(
                     cursor.getColumnIndexOrThrow(TaskContract.TaskEntry.COLUMN_NAME_MONGO_ID));
+            int syncTbd = cursor.getInt(
+                    cursor.getColumnIndexOrThrow(TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE));
 
             Task task = new Task();
             task.setId(mongoId);
             task.setOwner(owner);
             task.setDone(done);
             task.setName(name);
+            task.setToCreateToDelete(syncTbd);
             tasks.add(task);
         }
         cursor.close();
@@ -210,7 +229,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * List the tasks that are stored in database.
+     * List the acahts that are stored in database.
      *
      * @param onlyAchatToSync determine if the only taks to return are the one to sync.
      * @return
@@ -223,19 +242,23 @@ public class DbHelper extends SQLiteOpenHelper {
                 AchatContract.AchatEntry.COLUMN_NAME_TITLE,
                 AchatContract.AchatEntry.COLUMN_NAME_DONE,
                 AchatContract.AchatEntry.COLUMN_NAME_MONGO_ID,
-      };
-
-
-// How you want the results sorted in the resulting Cursor
+        };
         String sortOrder = null;
-
         String selection = null;
-
-        // Filter results WHERE "title" = 'My Title'
         String[] selectionArgs = {};
+        /**
+         * In case we will use the list to perform the synchronization
+         */
         if (onlyAchatToSync) {
             selection = TaskContract.TaskEntry.COLUMN_NAME_INSYNC + " LIKE ?";
-            selectionArgs =new String[] {"false" };
+            selectionArgs = new String[]{"false"};
+        }
+        /**
+         * In case we will use the list to perform the deletion
+         */
+        else {
+            selection = TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE + " != ?";
+            selectionArgs = new String[]{TO_DELETE.toString()};
         }
         Cursor cursor = db.query(
                 AchatContract.AchatEntry.TABLE_NAME,                     // The table to query
@@ -273,7 +296,7 @@ public class DbHelper extends SQLiteOpenHelper {
      *
      * @param task
      */
-    public void insertTask(Task task,boolean inSync) {
+    public void insertTask(Task task, boolean inSync, int typeofMod) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TaskContract.TaskEntry.COLUMN_NAME_TITLE, task.getName());
@@ -281,15 +304,17 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(TaskContract.TaskEntry.COLUMN_NAME_INSYNC, inSync);
         values.put(TaskContract.TaskEntry.COLUMN_NAME_OWNER, task.getOwner());
         values.put(TaskContract.TaskEntry.COLUMN_NAME_MONGO_ID, task.getId());
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE, typeofMod);
         values.put(TaskContract.TaskEntry.COLUMN_NAME_TEMPORARY, task.getTemporary());
         long newRowId = db.insert(TaskContract.TaskEntry.TABLE_NAME, null, values);
     }
+
     /**
      * Insert an achat in the database.
      *
      * @param achat
      */
-    public void insertAchat(Achat achat,boolean inSync) {
+    public void insertAchat(Achat achat, boolean inSync) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AchatContract.AchatEntry.COLUMN_NAME_TITLE, achat.getName());
@@ -322,5 +347,24 @@ public class DbHelper extends SQLiteOpenHelper {
                 selectionArgs);
     }
 
+    /**
+     * This mark a task for deletion in database
+     *
+     * @param taskId
+     */
+    public void markTaskForDeletion(String taskId) {
+        SQLiteDatabase db = getWritableDatabase();
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_INSYNC, false);
+        values.put(TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE, TO_DELETE);
 
+        String selection = TaskContract.TaskEntry.COLUMN_NAME_MONGO_ID + " LIKE ?";
+        String[] selectionArgs = {taskId};
+        int count = db.update(
+                TaskContract.TaskEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+    }
 }

@@ -21,5 +21,7 @@ public interface TaskListFragmentI extends ConnectedContextI {
 
     Context getContext();
 
+    public void taskEnregistre();
+
 }
 

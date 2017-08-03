@@ -10,8 +10,14 @@ public class Task {
     private String id;
 
     private Boolean done;
-
+    /**
+     * Whether a task is temporary or not
+     */
     private Boolean temporary;
+    /**
+     * The synchronisation to apply
+     */
+    private int toCreateToDelete;
 
     private String owner;
 
@@ -60,5 +66,13 @@ public class Task {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public int getToCreateToDelete() {
+        return toCreateToDelete;
+    }
+
+    public void setToCreateToDelete(int toCreateToDelete) {
+        this.toCreateToDelete = toCreateToDelete;
     }
 }
