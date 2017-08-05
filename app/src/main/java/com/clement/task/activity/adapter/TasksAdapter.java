@@ -138,7 +138,7 @@ public class TasksAdapter implements ListAdapter {
             @Override
             public void onClick(View v) {
                 task.setDone(checkBox.isChecked());
-                UpdateTodoTask updateTodoTask = new UpdateTodoTask(taskFragment, task,taskFragment.getTaskSQLiteHelper());
+                UpdateTodoTask updateTodoTask = new UpdateTodoTask(taskFragment, task);
                 updateTodoTask.execute();
                 Log.i(AppConstants.ACTIVITY_TAG__TAG, "Click sur la tâche " + task.getId());
             }

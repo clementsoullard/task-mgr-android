@@ -18,7 +18,7 @@ import com.clement.task.R;
 import com.clement.task.AppConstants;
 import com.clement.task.activity.adapter.CoursesAdapter;
 import com.clement.task.object.Achat;
-import com.clement.task.task.achat.AddAchatTask;
+import com.clement.task.task.achat.CreateAchatTask;
 import com.clement.task.task.achat.ListAchatTask;
 import com.clement.task.task.achat.ListSuggestAchatTask;
 import com.clement.task.task.achat.RemoveAchatTask;
@@ -105,7 +105,7 @@ public class CourseFragment extends BaseFragment{
                 Log.d(AppConstants.ACTIVITY_TAG__TAG, "Click sur le bouton ajout");
                 Achat achat = new Achat();
                 achat.setName(achatAjoutEdt.getText().toString());
-                AddAchatTask addAchatTask = new AddAchatTask(CourseFragment.this, achat);
+                CreateAchatTask addAchatTask = new CreateAchatTask(CourseFragment.this, achat);
                 addAchatTask.execute();
             }
         });

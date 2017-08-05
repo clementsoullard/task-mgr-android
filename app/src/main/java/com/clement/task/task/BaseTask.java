@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.clement.task.AppConstants;
 import com.clement.task.activity.ConnectedContextI;
-import com.clement.task.activity.contract.DbHelper;
+import com.clement.task.activity.database.DbHelperI;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -33,9 +33,9 @@ public abstract class BaseTask extends AsyncTask<Integer, Integer, Long> {
 
     protected ConnectedContextI connectedActivity;
 
-    protected DbHelper dbHelper;
+    protected DbHelperI dbHelper;
 
-    public BaseTask(ConnectedContextI connectedActivity, DbHelper taskSQLiteHelper) {
+    public BaseTask(ConnectedContextI connectedActivity, DbHelperI taskSQLiteHelper) {
         this.connectedActivity = connectedActivity;
         this.dbHelper = taskSQLiteHelper;
     }

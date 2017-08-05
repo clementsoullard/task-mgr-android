@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.clement.task.activity.ConnectedContextI;
 import com.clement.task.activity.TasksActivity;
-import com.clement.task.activity.contract.DbHelper;
+import com.clement.task.activity.database.DbHelperI;
 
 /**
  * Created by cleme on 29/07/2017.
@@ -23,7 +23,7 @@ public class BaseFragment  extends android.support.v4.app.Fragment implements Co
     }
 
     @Override
-    public DbHelper getTaskSQLiteHelper() {
+    public DbHelperI getTaskSQLiteHelper() {
         return ((TasksActivity)getActivity()).getTaskSQLiteHelper();
     }
 

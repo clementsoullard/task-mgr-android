@@ -5,9 +5,9 @@ import android.util.JsonToken;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
+import com.clement.task.activity.database.DbTaskHelper;
 import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.object.Achat;
-import com.clement.task.task.BaseTask;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,24 +19,36 @@ import java.util.List;
 /**
  * Created by Clément on 09/07/2016.
  */
-public class ListAchatTask extends BaseTask {
+public class ListAchatTask extends CrudAchatTask {
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
     List<Achat> achats;
 
-    CourseFragment listeCourseActivity;
 
     //  private String messageRetour;
 
     public ListAchatTask(CourseFragment listeCourseActivity) {
-        super(listeCourseActivity, listeCourseActivity.getTaskSQLiteHelper());
-        this.listeCourseActivity = listeCourseActivity;
+        super(listeCourseActivity);
     }
 
     @Override
     protected Long doInBackground(Integer... params) {
         try {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "Execution " + this.getClass());
+
+            /**
+             * First we check if there are some elements to sync before doing the actual synchronisation.
+             */
+            List<Achat> achatsToSync = dbHelper.listAchats(true);
+            if (achatsToSync.size() > 0) {
+                Log.d(AppConstants.ACTIVITY_TAG__TAG, "There are some task to Sync before calling the server.");
+                for (Achat achatToSync : achatsToSync
+                        ) {
+                    syncAchat(achatToSync);
+                    Log.d(AppConstants.ACTIVITY_TAG__TAG, "Need to sync " + achatToSync.getName());
+                }
+            }
             InputStream is = getHttpUrlConnection("/tvscheduler/ws-active-achat").getInputStream();
             readJsonStream(is);
             return 0L;
@@ -52,14 +64,14 @@ public class ListAchatTask extends BaseTask {
     @Override
     protected void onPostExecute(Long aLong) {
         if (achats == null) {
-            listeCourseActivity.showMessage("Erreur du service");
+            courseFragment.showMessage("Erreur du service");
             return;
         }
-        Log.i(AppConstants.ACTIVITY_TAG__TAG, "Achat retournés avec succès");
+        Log.i(AppConstants.ACTIVITY_TAG__TAG, "Achats retournés avec succès");
         for (Achat achat : achats) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "Achat: " + achat.getName());
         }
-        listeCourseActivity.setAchats(achats);
+        courseFragment.setAchats(achats);
 
     }
 
@@ -136,5 +148,24 @@ public class ListAchatTask extends BaseTask {
 
         return achat;
     }
+
+    /**
+     * Synchronize a task with server side.
+     *
+     * @param achatToSync
+     */
+    private void syncAchat(Achat achatToSync) throws Exception {
+        if (achatToSync.getToCreateToDelete() == DbTaskHelper.TO_CREATE) {
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "An achat " + achatToSync.getName() + " must be created on server side");
+            callCreateAchatWebService(achatToSync);
+        } else if (achatToSync.getToCreateToDelete() == DbTaskHelper.TO_DELETE) {
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "An achat " + achatToSync.getName() + " must be deleted on server side");
+                   callDeleteAchatWebService(achatToSync.getId());
+        } else if (achatToSync.getToCreateToDelete() == DbTaskHelper.TO_UPDATE) {
+            Log.i(AppConstants.ACTIVITY_TAG__TAG, "An achat " + achatToSync.getName() + " must be updated on server side");
+                  callUpdateAchatWebService(achatToSync);
+        }
+    }
+
 
 }

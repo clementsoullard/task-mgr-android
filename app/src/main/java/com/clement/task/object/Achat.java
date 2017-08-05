@@ -4,11 +4,17 @@ package com.clement.task.object;
  * Created by cleme on 29/10/2016.
  */
 public class Achat {
-    String name;
+    private String name;
 
-    String id;
+    private String id;
 
-    Boolean done;
+    private Boolean done;
+
+    /**
+     * The synchronisation to apply
+     */
+    private int toCreateToDelete;
+
 
 
     public void setDone(Boolean done) {
@@ -39,5 +45,11 @@ public class Achat {
         this.id = id;
     }
 
+    public int getToCreateToDelete() {
+        return toCreateToDelete;
+    }
 
+    public void setToCreateToDelete(int toCreateToDelete) {
+        this.toCreateToDelete = toCreateToDelete;
+    }
 }

@@ -3,7 +3,7 @@ package com.clement.task.task.task;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.contract.DbHelper;
+import com.clement.task.activity.database.DbTaskHelper;
 import com.clement.task.activity.fragment.TaskFragment;
 import com.clement.task.object.Task;
 
@@ -11,7 +11,7 @@ import com.clement.task.object.Task;
  * This task is to add an task to the liste de courses
  * Created by Clément on 09/07/2016.
  */
-public class AddTodoTask extends CrudTodoTask {
+public class CreateTodoTask extends CrudTodoTask {
 
 
     private Task task;
@@ -21,7 +21,7 @@ public class AddTodoTask extends CrudTodoTask {
      *
      */
 
-    public AddTodoTask(TaskFragment createTaskActivity, Task task) {
+    public CreateTodoTask(TaskFragment createTaskActivity, Task task) {
         super(createTaskActivity);
         this.task = task;
     }
@@ -30,10 +30,10 @@ public class AddTodoTask extends CrudTodoTask {
     protected Long doInBackground(Integer... params) {
         try {
             callCreateWebService(task);
-            dbHelper.insertTask(task, true, DbHelper.IN_SYNC);
+            dbHelper.insertTask(task, true, DbTaskHelper.IN_SYNC);
             return 0L;
         } catch (Exception e) {
-            dbHelper.insertTask(task, false, DbHelper.TO_CREATE);
+            dbHelper.insertTask(task, false, DbTaskHelper.TO_CREATE);
             Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage() + " ajout manuel a la db.");
         }
         messageRetour = "Service non disponible";

@@ -12,14 +12,10 @@ import java.net.HttpURLConnection;
  * This task is to remove an achat to the liste de courses
  * Created by Clément on 09/07/2016.
  */
-public class RemoveTodoTask extends BaseTask {
+public class RemoveTodoTask extends CrudTodoTask {
 
-
-    private String messageRetour;
 
     private String taskId;
-
-    private TaskListFragmentI mainActivity;
 
     /**
      *
@@ -27,8 +23,7 @@ public class RemoveTodoTask extends BaseTask {
      */
 
     public RemoveTodoTask(TaskListFragmentI mainActivity, String id) {
-        super(mainActivity,mainActivity.getTaskSQLiteHelper());
-        this.mainActivity = mainActivity;
+        super(mainActivity);
         this.taskId = id;
     }
 
@@ -36,18 +31,7 @@ public class RemoveTodoTask extends BaseTask {
     protected Long doInBackground(Integer... params) {
 
         try {
-            HttpURLConnection urlConnection = getHttpUrlConnection("tvscheduler/repository/task/" + taskId);
-            urlConnection.setRequestMethod("DELETE");
-            urlConnection.setDoInput(false);
-            urlConnection.setDoOutput(true);
-
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            int responseCode = urlConnection.getResponseCode();
-            if (responseCode == 204) {
-                messageRetour = "Succès";
-            } else {
-                messageRetour = "Erreur";
-            }
+            callDelWebService(taskId);
             return 0L;
         } catch (Exception e) {
             dbHelper.markTaskForDeletion(taskId);
@@ -61,6 +45,6 @@ public class RemoveTodoTask extends BaseTask {
     @Override
     protected void onPostExecute(Long aLong) {
         connectedActivity.showMessage(messageRetour);
-        mainActivity.refreshTaskList();
+        taskFragmentI.refreshTaskList();
     }
 }

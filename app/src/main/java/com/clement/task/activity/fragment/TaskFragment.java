@@ -1,6 +1,5 @@
 package com.clement.task.activity.fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -21,7 +20,7 @@ import com.clement.task.AppConstants;
 import com.clement.task.activity.TaskListFragmentI;
 import com.clement.task.activity.adapter.TasksAdapter;
 import com.clement.task.object.Task;
-import com.clement.task.task.task.AddTodoTask;
+import com.clement.task.task.task.CreateTodoTask;
 import com.clement.task.task.task.ListTodoTask;
 import com.clement.task.task.task.RemoveTodoTask;
 
@@ -93,7 +92,7 @@ public class TaskFragment extends BaseFragment implements TaskListFragmentI {
                     task.setOwner("Home");
                 }
 
-                AddTodoTask addTodoTask = new AddTodoTask(TaskFragment.this, task);
+                CreateTodoTask addTodoTask = new CreateTodoTask(TaskFragment.this, task);
                 addTodoTask.execute();
             }
         });

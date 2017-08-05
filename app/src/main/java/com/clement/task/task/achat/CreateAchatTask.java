@@ -16,23 +16,18 @@ import java.net.HttpURLConnection;
  * This task is to add an achat to the liste de courses
  * Created by Clément on 09/07/2016.
  */
-public class AddAchatTask extends BaseTask {
+public class CreateAchatTask extends CrudAchatTask {
 
-
-    private String messageRetour;
 
     private Achat achat;
-
-    private CourseFragment listeCourseActivity;
 
     /**
      *
      *
      */
 
-    public AddAchatTask(CourseFragment listCourseActivity, Achat achat) {
-        super(listCourseActivity,listCourseActivity.getTaskSQLiteHelper());
-        this.listeCourseActivity = listCourseActivity;
+    public CreateAchatTask(CourseFragment courseFragment, Achat achat) {
+        super(courseFragment);
         this.achat = achat;
     }
 
@@ -44,22 +39,7 @@ public class AddAchatTask extends BaseTask {
         }
 
         try {
-            HttpURLConnection urlConnection = getHttpUrlConnection("tvscheduler/ws-create-achat");
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-          /*
-             * JSON
-             */
-            JSONObject root = new JSONObject();
-            root.put("name", achat.getName());
-            String str = root.toString();
-            byte[] outputBytes = str.getBytes("UTF-8");
-            OutputStream os = urlConnection.getOutputStream();
-            os.write(outputBytes);
-            int responseCode = urlConnection.getResponseCode();
+            int responseCode = callCreateAchatWebService(achat);
             if (responseCode == 200) {
                 messageRetour = "Succès";
             } else {
@@ -67,6 +47,7 @@ public class AddAchatTask extends BaseTask {
             }
             return 0L;
         } catch (Exception e) {
+            dbHelper.insertAchat(achat,false);
             Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
         }
         messageRetour = "Service non disponible";
@@ -77,6 +58,6 @@ public class AddAchatTask extends BaseTask {
     @Override
     protected void onPostExecute(Long aLong) {
         connectedActivity.showMessage(messageRetour);
-        listeCourseActivity.refreshListeAchat();
+        courseFragment.refreshListeAchat();
     }
 }

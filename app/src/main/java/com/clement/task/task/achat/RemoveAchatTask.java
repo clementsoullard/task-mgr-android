@@ -13,14 +13,10 @@ import java.net.HttpURLConnection;
  * This task is to remove an achat to the liste de courses
  * Created by Clément on 09/07/2016.
  */
-public class RemoveAchatTask extends BaseTask {
+public class RemoveAchatTask extends CrudAchatTask {
 
-
-    private String messageRetour;
 
     private String achatId;
-
-    private CourseFragment listeCourseActivity;
 
     /**
      *
@@ -28,8 +24,7 @@ public class RemoveAchatTask extends BaseTask {
      */
 
     public RemoveAchatTask(CourseFragment listCourseActivity, String achatId) {
-        super(listCourseActivity,listCourseActivity.getTaskSQLiteHelper());
-        this.listeCourseActivity = listCourseActivity;
+        super(listCourseActivity);
         this.achatId = achatId;
     }
 
@@ -37,13 +32,8 @@ public class RemoveAchatTask extends BaseTask {
     protected Long doInBackground(Integer... params) {
 
         try {
-            HttpURLConnection urlConnection = getHttpUrlConnection("tvscheduler/repository/achat/" + achatId);
-            urlConnection.setRequestMethod("DELETE");
-            urlConnection.setDoInput(false);
-            urlConnection.setDoOutput(true);
+            int responseCode = callDeleteAchatWebService(achatId);
 
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            int responseCode = urlConnection.getResponseCode();
             if (responseCode == 204) {
                 messageRetour = "Succès";
             } else {
@@ -51,6 +41,7 @@ public class RemoveAchatTask extends BaseTask {
             }
             return 0L;
         } catch (Exception e) {
+            dbHelper.markAchatForDeletion(achatId);
             Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage());
         }
         messageRetour = "Service non disponible";
@@ -61,6 +52,6 @@ public class RemoveAchatTask extends BaseTask {
     @Override
     protected void onPostExecute(Long aLong) {
         connectedActivity.showMessage(messageRetour);
-        listeCourseActivity.refreshListeAchat();
+        courseFragment.refreshListeAchat();
     }
 }

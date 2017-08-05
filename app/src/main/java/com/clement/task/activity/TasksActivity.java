@@ -9,7 +9,8 @@ import android.widget.Toast;
 
 import com.clement.task.R;
 import com.clement.task.activity.adapter.ScreenSlidePagerAdapter;
-import com.clement.task.activity.contract.DbHelper;
+import com.clement.task.activity.database.DbAchatHelper;
+import com.clement.task.activity.database.DbHelperI;
 
 public class TasksActivity extends FragmentActivity implements ConnectedContextI {
 
@@ -29,7 +30,7 @@ public class TasksActivity extends FragmentActivity implements ConnectedContextI
      */
     private PagerAdapter mPagerAdapter;
 
-    private DbHelper taskSQLiteHelper;
+    private DbHelperI taskSQLiteHelper;
 
     @Override
     public void onBackPressed() {
@@ -45,9 +46,9 @@ public class TasksActivity extends FragmentActivity implements ConnectedContextI
 
 
     @Override
-    public DbHelper getTaskSQLiteHelper() {
+    public DbHelperI getTaskSQLiteHelper() {
         if (taskSQLiteHelper == null) {
-            taskSQLiteHelper = new DbHelper(this);
+            taskSQLiteHelper = new DbAchatHelper(this);
         }
         return taskSQLiteHelper;
     }

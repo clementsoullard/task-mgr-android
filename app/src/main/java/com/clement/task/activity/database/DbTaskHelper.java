@@ -1,4 +1,4 @@
-package com.clement.task.activity.contract;
+package com.clement.task.activity.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.object.Achat;
 import com.clement.task.object.Task;
 
 import java.text.DateFormat;
@@ -21,7 +20,7 @@ import java.util.List;
  * Created by cleme on 30/07/2017.
  */
 
-public class DbHelper extends SQLiteOpenHelper {
+public class DbTaskHelper extends SQLiteOpenHelper {
 
     /**
      * This are the value to store the status of the entry in the column to create to delete.
@@ -79,7 +78,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "Task.db";
 
-    public DbHelper(Context context) {
+    public DbTaskHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -110,13 +109,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.delete(TaskContract.TaskEntry.TABLE_NAME, null, null);
     }
 
-    /**
-     * Clear all the entries in the database.
-     */
-    public void clearAchat() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(AchatContract.AchatEntry.TABLE_NAME, null, null);
-    }
 
     /**
      * Check if the entry is in the database.
@@ -124,6 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * @param mongoId
      * @return
      */
+
     public boolean getTaskByMongoId(String mongoId) {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
@@ -187,8 +180,8 @@ public class DbHelper extends SQLiteOpenHelper {
             selection = TaskContract.TaskEntry.COLUMN_NAME_INSYNC + " LIKE ?";
             selectionArgs = new String[]{"0"};
         } else {
-            selection = TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE + " != 2  or "+TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE +" is null";
-       //     selectionArgs = new String[]{TO_DELETE.toString()};
+            selection = TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE + " != 2  or " + TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE + " is null";
+            //     selectionArgs = new String[]{TO_DELETE.toString()};
         }
 
         Cursor cursor = db.query(
@@ -213,7 +206,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     cursor.getColumnIndexOrThrow(TaskContract.TaskEntry.COLUMN_NAME_OWNER));
             String mongoId = cursor.getString(
                     cursor.getColumnIndexOrThrow(TaskContract.TaskEntry.COLUMN_NAME_MONGO_ID));
-            int syncTbd = cursor.getInt(
+            int toCreateToUpdate = cursor.getInt(
                     cursor.getColumnIndexOrThrow(TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE));
 
             Task task = new Task();
@@ -221,75 +214,13 @@ public class DbHelper extends SQLiteOpenHelper {
             task.setOwner(owner);
             task.setDone(done);
             task.setName(name);
-            task.setToCreateToDelete(syncTbd);
+            task.setToCreateToDelete(toCreateToUpdate);
             tasks.add(task);
         }
         cursor.close();
         return tasks;
     }
 
-    /**
-     * List the acahts that are stored in database.
-     *
-     * @param onlyAchatToSync determine if the only taks to return are the one to sync.
-     * @return
-     */
-    public List<Achat> listAchats(boolean onlyAchatToSync) {
-        List<Achat> achats = new ArrayList<Achat>();
-        SQLiteDatabase db = getWritableDatabase();
-        String[] projection = {
-                AchatContract.AchatEntry._ID,
-                AchatContract.AchatEntry.COLUMN_NAME_TITLE,
-                AchatContract.AchatEntry.COLUMN_NAME_DONE,
-                AchatContract.AchatEntry.COLUMN_NAME_MONGO_ID,
-        };
-        String sortOrder = null;
-        String selection = null;
-        String[] selectionArgs = {};
-        /**
-         * In case we will use the list to perform the synchronization
-         */
-        if (onlyAchatToSync) {
-            selection = TaskContract.TaskEntry.COLUMN_NAME_INSYNC + " LIKE ?";
-            selectionArgs = new String[]{"false"};
-        }
-        /**
-         * In case we will use the list to perform the deletion
-         */
-        else {
-            selection = TaskContract.TaskEntry.COLUMN_NAME_TOCREATE_TODELETE + " != ?";
-            selectionArgs = new String[]{TO_DELETE.toString()};
-        }
-        Cursor cursor = db.query(
-                AchatContract.AchatEntry.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                selection,                                // The columns for the WHERE clause
-                selectionArgs,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                sortOrder                                 // The sort order
-        );
-
-        List itemIds = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            long itemId = cursor.getLong(
-                    cursor.getColumnIndexOrThrow(AchatContract.AchatEntry._ID));
-            String name = cursor.getString(
-                    cursor.getColumnIndexOrThrow(AchatContract.AchatEntry.COLUMN_NAME_TITLE));
-            Boolean done = !(0 == cursor.getInt(
-                    cursor.getColumnIndexOrThrow(AchatContract.AchatEntry.COLUMN_NAME_DONE)));
-            String mongoId = cursor.getString(
-                    cursor.getColumnIndexOrThrow(AchatContract.AchatEntry.COLUMN_NAME_MONGO_ID));
-
-            Achat achat = new Achat();
-            achat.setId(mongoId);
-            achat.setDone(done);
-            achat.setName(name);
-            achats.add(achat);
-        }
-        cursor.close();
-        return achats;
-    }
 
     /**
      * Insert a task in the database.
@@ -309,26 +240,12 @@ public class DbHelper extends SQLiteOpenHelper {
         long newRowId = db.insert(TaskContract.TaskEntry.TABLE_NAME, null, values);
     }
 
-    /**
-     * Insert an achat in the database.
-     *
-     * @param achat
-     */
-    public void insertAchat(Achat achat, boolean inSync) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(AchatContract.AchatEntry.COLUMN_NAME_TITLE, achat.getName());
-        values.put(AchatContract.AchatEntry.COLUMN_NAME_DONE, achat.getDone());
-        values.put(AchatContract.AchatEntry.COLUMN_NAME_INSYNC, inSync);
-        values.put(AchatContract.AchatEntry.COLUMN_NAME_MONGO_ID, achat.getId());
-        long newRowId = db.insert(AchatContract.AchatEntry.TABLE_NAME, null, values);
-    }
 
     /***
      * Mark a task as not in sync
      * @param mongoId
      */
-    public void setModified(String mongoId, Boolean done, Integer toCreateToDelete) {
+    public void updateTask(String mongoId, Boolean done, Integer toCreateToDelete) {
         SQLiteDatabase db = getWritableDatabase();
         // New value for one column
         ContentValues values = new ContentValues();
