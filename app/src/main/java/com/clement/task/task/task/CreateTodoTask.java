@@ -3,7 +3,7 @@ package com.clement.task.task.task;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.database.DbTaskHelper;
+import com.clement.task.database.TaskDao;
 import com.clement.task.activity.fragment.TaskFragment;
 import com.clement.task.object.Task;
 
@@ -30,10 +30,10 @@ public class CreateTodoTask extends CrudTodoTask {
     protected Long doInBackground(Integer... params) {
         try {
             callCreateWebService(task);
-            dbHelper.insertTask(task, true, DbTaskHelper.IN_SYNC);
+            dbHelper.insertTask(task, true, TaskDao.IN_SYNC);
             return 0L;
         } catch (Exception e) {
-            dbHelper.insertTask(task, false, DbTaskHelper.TO_CREATE);
+            dbHelper.insertTask(task, false, TaskDao.TO_CREATE);
             Log.e(AppConstants.ACTIVITY_TAG__TAG, "Erreur " + e.getMessage() + " ajout manuel a la db.");
         }
         messageRetour = "Service non disponible";

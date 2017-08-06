@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import com.clement.task.activity.ConnectedContextI;
 import com.clement.task.activity.TasksActivity;
-import com.clement.task.activity.database.DbHelperI;
+import com.clement.task.database.DbHelperI;
 
 /**
  * Created by cleme on 29/07/2017.

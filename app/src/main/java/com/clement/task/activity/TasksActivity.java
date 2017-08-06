@@ -9,8 +9,9 @@ import android.widget.Toast;
 
 import com.clement.task.R;
 import com.clement.task.activity.adapter.ScreenSlidePagerAdapter;
-import com.clement.task.activity.database.DbAchatHelper;
-import com.clement.task.activity.database.DbHelperI;
+import com.clement.task.database.AchatDao;
+import com.clement.task.database.DbAppHelper;
+import com.clement.task.database.DbHelperI;
 
 public class TasksActivity extends FragmentActivity implements ConnectedContextI {
 
@@ -48,7 +49,7 @@ public class TasksActivity extends FragmentActivity implements ConnectedContextI
     @Override
     public DbHelperI getTaskSQLiteHelper() {
         if (taskSQLiteHelper == null) {
-            taskSQLiteHelper = new DbAchatHelper(this);
+            taskSQLiteHelper = new DbAppHelper(this);
         }
         return taskSQLiteHelper;
     }

@@ -1,4 +1,4 @@
-package com.clement.task.activity.database;
+package com.clement.task.database;
 
 import com.clement.task.object.Achat;
 import com.clement.task.object.Task;

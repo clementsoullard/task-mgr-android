@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.clement.task.AppConstants;
 import com.clement.task.activity.ConnectedContextI;
-import com.clement.task.activity.database.DbHelperI;
+import com.clement.task.database.DbHelperI;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;

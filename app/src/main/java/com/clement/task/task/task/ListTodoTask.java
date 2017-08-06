@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.clement.task.AppConstants;
 import com.clement.task.activity.TaskListFragmentI;
-import com.clement.task.activity.database.DbTaskHelper;
+import com.clement.task.database.TaskDao;
 import com.clement.task.object.Task;
 
 import java.io.IOException;
@@ -62,13 +62,13 @@ public class ListTodoTask extends CrudTodoTask {
      * @param taskToSync
      */
     private void syncTask(Task taskToSync) throws Exception {
-        if (taskToSync.getToCreateToDelete() == DbTaskHelper.TO_CREATE) {
+        if (taskToSync.getToCreateToDelete() == TaskDao.TO_CREATE) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "A task " + taskToSync.getName() + " must be created on server side");
             callCreateWebService(taskToSync);
-        } else if (taskToSync.getToCreateToDelete() == DbTaskHelper.TO_DELETE) {
+        } else if (taskToSync.getToCreateToDelete() == TaskDao.TO_DELETE) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "A task " + taskToSync.getName() + " must be deleted on server side");
             callDelWebService(taskToSync.getId());
-        } else if (taskToSync.getToCreateToDelete() == DbTaskHelper.TO_UPDATE) {
+        } else if (taskToSync.getToCreateToDelete() == TaskDao.TO_UPDATE) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "A task " + taskToSync.getName() + " must be updated on server side");
             callUpdateWebService(taskToSync);
         }
@@ -125,7 +125,7 @@ public class ListTodoTask extends CrudTodoTask {
         while (reader.hasNext()) {
             Task task = readTask(reader);
             tasks.add(task);
-            dbHelper.insertTask(task, true, DbTaskHelper.IN_SYNC);
+            dbHelper.insertTask(task, true, TaskDao.IN_SYNC);
         }
         return tasks;
     }

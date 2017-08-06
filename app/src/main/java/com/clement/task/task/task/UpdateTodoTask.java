@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.clement.task.AppConstants;
 import com.clement.task.activity.TaskListFragmentI;
-import com.clement.task.activity.database.TaskContract;
+import com.clement.task.database.TableDaoI;
 import com.clement.task.object.Task;
 
 /**
@@ -29,7 +29,7 @@ public class UpdateTodoTask extends CrudTodoTask {
             return 0L;
         } catch (Exception e) {
             Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage() + "  - False - HTTP_OK updating db marking to sync");
-            dbHelper.updateTask(task.getId(), task.getDone(), TaskContract.TO_UPDATE);
+            dbHelper.updateTask(task.getId(), task.getDone(), TableDaoI.TO_UPDATE);
             messageRetour = "Service non disponible";
 
             Log.e(AppConstants.ACTIVITY_TAG__TAG, e.getMessage(), e);

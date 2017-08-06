@@ -7,15 +7,19 @@ public class Achat {
     private String name;
 
     private String id;
-
+    /**
+     * If an achat is done.
+     */
     private Boolean done;
+    /**
+     * If an achat is active (that is if the purchase is to be done.
+     */
+    private Boolean active = true;
 
     /**
      * The synchronisation to apply
      */
     private int toCreateToDelete;
-
-
 
     public void setDone(Boolean done) {
         this.done = done;
@@ -51,5 +55,13 @@ public class Achat {
 
     public void setToCreateToDelete(int toCreateToDelete) {
         this.toCreateToDelete = toCreateToDelete;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

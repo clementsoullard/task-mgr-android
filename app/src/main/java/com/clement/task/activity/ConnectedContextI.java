@@ -2,7 +2,7 @@ package com.clement.task.activity;
 
 import android.content.res.AssetManager;
 
-import com.clement.task.activity.database.DbHelperI;
+import com.clement.task.database.DbHelperI;
 
 /**
  * Contract that should be implemented by every connected activity and managing synchronization.

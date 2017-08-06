@@ -5,7 +5,7 @@ import android.util.JsonToken;
 import android.util.Log;
 
 import com.clement.task.AppConstants;
-import com.clement.task.activity.database.DbTaskHelper;
+import com.clement.task.database.TaskDao;
 import com.clement.task.activity.fragment.CourseFragment;
 import com.clement.task.object.Achat;
 
@@ -155,13 +155,13 @@ public class ListAchatTask extends CrudAchatTask {
      * @param achatToSync
      */
     private void syncAchat(Achat achatToSync) throws Exception {
-        if (achatToSync.getToCreateToDelete() == DbTaskHelper.TO_CREATE) {
+        if (achatToSync.getToCreateToDelete() == TaskDao.TO_CREATE) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "An achat " + achatToSync.getName() + " must be created on server side");
             callCreateAchatWebService(achatToSync);
-        } else if (achatToSync.getToCreateToDelete() == DbTaskHelper.TO_DELETE) {
+        } else if (achatToSync.getToCreateToDelete() == TaskDao.TO_DELETE) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "An achat " + achatToSync.getName() + " must be deleted on server side");
                    callDeleteAchatWebService(achatToSync.getId());
-        } else if (achatToSync.getToCreateToDelete() == DbTaskHelper.TO_UPDATE) {
+        } else if (achatToSync.getToCreateToDelete() == TaskDao.TO_UPDATE) {
             Log.i(AppConstants.ACTIVITY_TAG__TAG, "An achat " + achatToSync.getName() + " must be updated on server side");
                   callUpdateAchatWebService(achatToSync);
         }
